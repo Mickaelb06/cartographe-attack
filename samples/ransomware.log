@@ -1,0 +1,13 @@
+2026-09-27T23:40:11Z host=SRV-APP03 EventID=4720 SubjectUserName=svc_sql TargetUserName=helpdesk$ "A user account was created"
+2026-09-27T23:40:19Z host=SRV-APP03 EventID=1 CommandLine="net localgroup administrators helpdesk$ /add"
+2026-09-27T23:41:02Z host=SRV-APP03 EventID=4104 ScriptBlockText="Set-MpPreference -DisableRealtimeMonitoring $true; Add-MpPreference -ExclusionPath C:\ProgramData"
+2026-09-27T23:41:30Z host=SRV-APP03 EventID=1 CommandLine="netsh advfirewall set allprofiles state off"
+2026-09-27T23:42:05Z host=SRV-APP03 EventID=1 Image=C:\ProgramData\AnyDesk.exe CommandLine="AnyDesk.exe --install C:\ProgramData\AD --silent"
+2026-09-27T23:55:47Z host=SRV-APP03 EventID=1 CommandLine="vssadmin.exe delete shadows /all /quiet"
+2026-09-27T23:55:49Z host=SRV-APP03 EventID=1 CommandLine="wmic shadowcopy delete"
+2026-09-27T23:55:52Z host=SRV-APP03 EventID=1 CommandLine="bcdedit /set {default} recoveryenabled No"
+2026-09-27T23:55:55Z host=SRV-APP03 EventID=1 CommandLine="wbadmin delete catalog -quiet"
+2026-09-27T23:56:10Z host=SRV-APP03 EventID=11 TargetFilename=D:\Compta\Bilan_2025.xlsx.locked
+2026-09-27T23:56:10Z host=SRV-APP03 EventID=11 TargetFilename=D:\Compta\README_DECRYPT.txt
+2026-09-27T23:56:11Z host=SRV-APP03 EventID=11 TargetFilename=D:\RH\contrats.zip.locked
+2026-09-27T23:58:40Z host=SRV-APP03 EventID=1102 "The audit log was cleared." SubjectUserName=helpdesk$

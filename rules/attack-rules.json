@@ -1,0 +1,1925 @@
+[
+  {
+    "id": "T1190",
+    "name": "Exploit Public-Facing Application",
+    "tactics": [
+      "ia"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "union(\\s|%20|\\+|\\/\\*\\*\\/)+(all(\\s|%20|\\+)+)?select",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "(%27|')(\\s|%20|\\+)*or(\\s|%20|\\+)+('|%27)?\\d+('|%27)?(\\s|%20)*=(\\s|%20)*('|%27)?\\d+",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\$\\{jndi:",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "(\\.\\.\\/){2,}|(%2e%2e(%2f|\\/)){2,}|(\\.\\.%2f){2,}",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\/etc\\/passwd",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "(%3c|<)script",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "(;|%3b|\\||%7c)(\\s|%20|\\+)*(cat|id|whoami|uname|wget|curl)\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SU",
+      "CSPP",
+      "ITF",
+      "ACH"
+    ],
+    "checks": [
+      "Vérifier le code HTTP : un 200 sur une injection vaut plus qu’un 404.",
+      "Chercher des processus lancés par le serveur web juste après."
+    ]
+  },
+  {
+    "id": "T1595.002",
+    "name": "Vulnerability Scanning",
+    "tactics": [
+      "recon"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "sqlmap|nikto|acunetix|wpscan|nuclei|dirbuster|gobuster|ffuf|zgrab|masscan|nmap scripting engine|openvas",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "ITF",
+      "CAA",
+      "IPRA"
+    ],
+    "checks": [
+      "Scanner outillé ou test autorisé ? Vérifier les campagnes pentest en cours."
+    ]
+  },
+  {
+    "id": "T1505.003",
+    "name": "Web Shell",
+    "tactics": [
+      "persist"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "(cmd|exec|command|c)=(whoami|id|ls|dir|cat|net|ipconfig|uname|pwd)\\b",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\/(shell|cmd|c99|r57|wso|b374k|up|x)\\.(php|aspx?|jsp)\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "(w3wp|httpd|nginx|apache2?|tomcat|php-fpm)(\\.exe)?\\b.*\\b(cmd\\.exe|powershell|\\/bin\\/(ba)?sh|sh -c)",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "www-data.*(\\/bin\\/(ba)?sh|bash -i|python -c)",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "FCR",
+      "LFP",
+      "PT"
+    ],
+    "checks": [
+      "Lister les fichiers récemment écrits dans la racine web.",
+      "Comparer avec le déploiement légitime."
+    ]
+  },
+  {
+    "id": "T1566.001",
+    "name": "Spearphishing Attachment",
+    "tactics": [
+      "ia"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "(attachment|filename=|pi[eè]ce jointe).*\\.(docm|xlsm|pptm|iso|img|hta|lnk|vbs|js|scr|one)\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\.(docm|xlsm)\\b",
+        "flags": "i",
+        "weight": 1
+      },
+      {
+        "regex": "vbaproject|macro(s)? (enabled|activ)",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "DA",
+      "ACH",
+      "URA"
+    ],
+    "checks": [
+      "Identifier tous les destinataires du même message.",
+      "Purger le message des autres boîtes."
+    ]
+  },
+  {
+    "id": "T1204.002",
+    "name": "Malicious File",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "(winword|excel|powerpnt|outlook|acrord32|onenote)(\\.exe)?\\b.*\\b(cmd|powershell|pwsh|wscript|cscript|mshta|rundll32|regsvr32)\\.exe",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "(cmd|powershell|wscript|cscript|mshta)\\.exe.*parent\\w*[=: ]+[^=]*?(winword|excel|outlook)",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "ACH",
+      "EAL"
+    ],
+    "checks": [
+      "Récupérer le document source et son hash.",
+      "Chercher la même chaîne parent/enfant sur le parc."
+    ]
+  },
+  {
+    "id": "T1059.001",
+    "name": "PowerShell",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "powershell(\\.exe)?.*\\s-(e|ec|enc|encodedcommand)\\s+[A-Za-z0-9+\\/=]{16,}",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\b(iex|invoke-expression)\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "downloadstring|downloadfile|net\\.webclient",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\s-(nop|noprofile)\\b",
+        "flags": "i",
+        "weight": 1
+      },
+      {
+        "regex": "\\s-w(indowstyle)?\\s+hid(den)?\\b",
+        "flags": "i",
+        "weight": 1
+      },
+      {
+        "regex": "-(ep|executionpolicy)\\s+bypass",
+        "flags": "i",
+        "weight": 1
+      },
+      {
+        "regex": "\\bpowershell(\\.exe)?\\b",
+        "flags": "i",
+        "weight": 0.5
+      }
+    ],
+    "d3fend": [
+      "SEA",
+      "PSA",
+      "EAL"
+    ],
+    "checks": [
+      "Décoder le paramètre -enc (Base64 UTF-16LE).",
+      "Activer ou consulter Script Block Logging (4104)."
+    ]
+  },
+  {
+    "id": "T1059.003",
+    "name": "Windows Command Shell",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\bcmd(\\.exe)?\\s+\\/c\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "PLA"
+    ],
+    "checks": [
+      "Remonter au processus parent qui a lancé cmd."
+    ]
+  },
+  {
+    "id": "T1059.004",
+    "name": "Unix Shell",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\/dev\\/tcp\\/",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "bash\\s+-i\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\bnc(at)?\\b.*\\s-e\\s+\\/bin\\/(ba)?sh",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "mkfifo",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "pty\\.spawn",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "(curl|wget)\\b[^|]*\\|\\s*(ba)?sh\\b",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "SCA",
+      "OTF"
+    ],
+    "checks": [
+      "Vérifier l’IP distante du reverse shell et couper la session.",
+      "Identifier le compte qui a lancé le shell."
+    ]
+  },
+  {
+    "id": "T1059.005",
+    "name": "Visual Basic",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "(wscript|cscript)(\\.exe)?\\s+.*\\.(vbs|vbe|js|jse|wsf)\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SEA",
+      "EAL",
+      "EDL"
+    ],
+    "checks": [
+      "Récupérer le script et le passer en sandbox."
+    ]
+  },
+  {
+    "id": "T1047",
+    "name": "Windows Management Instrumentation",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "wmic(\\.exe)?\\b.*process\\s+call\\s+create",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "win32_process.*create|invoke-wmimethod|invoke-cimmethod",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "wmiprvse\\.exe.*\\b(cmd|powershell)\\.exe",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "PLA",
+      "EDL"
+    ],
+    "checks": [
+      "Vérifier si l’appel vise une machine distante (/node:)."
+    ]
+  },
+  {
+    "id": "T1053.005",
+    "name": "Scheduled Task",
+    "tactics": [
+      "exec",
+      "persist",
+      "privesc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "schtasks(\\.exe)?\\b.*\\/create",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\b4698\\b",
+        "flags": "",
+        "weight": 2
+      },
+      {
+        "regex": "register-scheduledtask|new-scheduledtask",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SJA",
+      "SCP",
+      "UAP"
+    ],
+    "checks": [
+      "Lire la commande /tr de la tâche et le compte d’exécution.",
+      "Supprimer la tâche après collecte."
+    ]
+  },
+  {
+    "id": "T1053.003",
+    "name": "Cron",
+    "tactics": [
+      "exec",
+      "persist",
+      "privesc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\bcrontab\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\/etc\\/cron\\.|\\/var\\/spool\\/cron",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "@reboot",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SJA",
+      "SCP",
+      "LFP"
+    ],
+    "checks": [
+      "Comparer la crontab à une référence saine."
+    ]
+  },
+  {
+    "id": "T1543.003",
+    "name": "Windows Service",
+    "tactics": [
+      "persist",
+      "privesc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\bsc(\\.exe)?\\s+(\\\\\\\\\\S+\\s+)?create\\b",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\b(7045|4697)\\b",
+        "flags": "",
+        "weight": 2
+      },
+      {
+        "regex": "new-service\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SBV",
+      "SICA",
+      "SCP"
+    ],
+    "checks": [
+      "Vérifier chemin et signature du binaire du service."
+    ]
+  },
+  {
+    "id": "T1543.002",
+    "name": "Systemd Service",
+    "tactics": [
+      "persist",
+      "privesc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\/etc\\/systemd\\/system\\/\\S+\\.service",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "systemctl\\s+(enable|daemon-reload)",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "SICA",
+      "SBV",
+      "LFP"
+    ],
+    "checks": [
+      "Lire la ligne ExecStart de l’unité créée."
+    ]
+  },
+  {
+    "id": "T1547.001",
+    "name": "Registry Run Keys / Startup Folder",
+    "tactics": [
+      "persist",
+      "privesc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "currentversion\\\\run(once)?\\b",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\\\start menu\\\\programs\\\\startup\\\\",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SICA",
+      "SCP",
+      "EAL"
+    ],
+    "checks": [
+      "Exporter la valeur de la clé Run avant suppression."
+    ]
+  },
+  {
+    "id": "T1136.001",
+    "name": "Local Account",
+    "tactics": [
+      "persist"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\bnet1?(\\.exe)?\\s+user\\s+\\S+.*\\/add\\b",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\b(useradd|adduser)\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\b4720\\b",
+        "flags": "",
+        "weight": 2
+      },
+      {
+        "regex": "new-localuser",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "LAM",
+      "UAP",
+      "AL"
+    ],
+    "checks": [
+      "Confirmer la création auprès de l’équipe IT, sinon désactiver le compte."
+    ]
+  },
+  {
+    "id": "T1098",
+    "name": "Account Manipulation",
+    "tactics": [
+      "persist",
+      "privesc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\bnet1?(\\.exe)?\\s+(local)?group\\s+\"?[^\"\\/]*(admin|domain admins|enterprise admins)[^\\/]*\\/add",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\b(4728|4732|4756)\\b",
+        "flags": "",
+        "weight": 2
+      },
+      {
+        "regex": "usermod\\s+-a?G\\s+\\S*(sudo|wheel|root|adm)\\b",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "authorized_keys",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "LAM",
+      "UAP",
+      "AL",
+      "CR"
+    ],
+    "checks": [
+      "Lister les membres actuels des groupes privilégiés.",
+      "Vérifier les clés SSH ajoutées."
+    ]
+  },
+  {
+    "id": "T1078",
+    "name": "Valid Accounts",
+    "tactics": [
+      "ia",
+      "persist",
+      "privesc",
+      "defev"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "accepted (password|publickey) for root\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "MFA",
+      "UGLPA",
+      "UBA"
+    ],
+    "checks": [
+      "Confirmer auprès de l’utilisateur que la connexion est bien la sienne."
+    ]
+  },
+  {
+    "id": "T1548.003",
+    "name": "Sudo and Sudo Caching",
+    "tactics": [
+      "privesc",
+      "defev"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "not in sudoers|incorrect password attempts?",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "sudo:.*COMMAND=\\/(usr\\/)?bin\\/(ba)?sh\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\bsudo\\s+(su\\b|-i\\b|-s\\b|bash\\b)",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "UAP",
+      "SCP",
+      "UBA"
+    ],
+    "checks": [
+      "Relire /etc/sudoers et les fichiers sudoers.d."
+    ]
+  },
+  {
+    "id": "T1548.001",
+    "name": "Setuid and Setgid",
+    "tactics": [
+      "privesc",
+      "defev"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "chmod\\s+(u\\+s|[246]7[0-7]{2})\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "find\\s+\\/.*-perm\\s+-?(4000|u=s)",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "LFP",
+      "SCP"
+    ],
+    "checks": [
+      "Lister les binaires SUID modifiés récemment."
+    ]
+  },
+  {
+    "id": "T1548.002",
+    "name": "Bypass User Account Control",
+    "tactics": [
+      "privesc",
+      "defev"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "fodhelper|computerdefaults\\.exe|sdclt\\.exe|ms-settings\\\\shell\\\\open|mscfile\\\\shell\\\\open",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "SCP",
+      "UAP",
+      "PSA"
+    ],
+    "checks": [
+      "Régler UAC sur « Toujours notifier » et retirer les droits admin locaux."
+    ]
+  },
+  {
+    "id": "T1055",
+    "name": "Process Injection",
+    "tactics": [
+      "defev",
+      "privesc"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "createremotethread|virtualallocex|writeprocessmemory|ntqueueapcthread|reflective\\w*inject",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\beventid[=:\\s]+8\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "SCA",
+      "PT",
+      "EAL"
+    ],
+    "checks": [
+      "Capturer la mémoire du processus cible avant de le tuer."
+    ]
+  },
+  {
+    "id": "T1562.001",
+    "name": "Disable or Modify Tools",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "set-mppreference.*-disable\\w+\\s+(\\$true|1)|disablerealtimemonitoring|disableantispyware",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "(add|set)-mppreference.*exclusion",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\bsc(\\.exe)?\\s+(stop|config|delete)\\s+(windefend|sense|wdnissvc|sysmon)",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "stop-service.*(windefend|sense)",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "systemctl\\s+(stop|disable|mask)\\s+(auditd|falcon-sensor|clamav|apparmor|wazuh|osquery)|setenforce\\s+0",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "SCP",
+      "UAP",
+      "PT"
+    ],
+    "checks": [
+      "Réactiver la protection et vérifier la télémétrie manquante depuis cette heure."
+    ]
+  },
+  {
+    "id": "T1562.004",
+    "name": "Disable or Modify System Firewall",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "netsh.*(advfirewall.*state\\s+off|firewall\\s+set\\s+opmode\\s+disable)|\\bufw\\s+disable|iptables\\s+-F\\b",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "SCP",
+      "NTA"
+    ],
+    "checks": [
+      "Restaurer la politique de pare-feu depuis la GPO."
+    ]
+  },
+  {
+    "id": "T1070.001",
+    "name": "Clear Windows Event Logs",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "wevtutil(\\.exe)?\\s+cl\\b",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\b1102\\b|audit log was cleared",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "clear-eventlog",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "SCP",
+      "UAP"
+    ],
+    "checks": [
+      "Récupérer les journaux depuis le SIEM : la copie locale est perdue."
+    ]
+  },
+  {
+    "id": "T1070.003",
+    "name": "Clear Command History",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "history\\s+-c|rm\\s+.*\\.bash_history|unset\\s+histfile|histfile=\\/dev\\/null|ln\\s+-sf\\s+\\/dev\\/null\\s+\\S*history",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "LFP",
+      "UBA"
+    ],
+    "checks": [
+      "Chercher les commandes dans auditd ou l’EDR plutôt que dans l’historique."
+    ]
+  },
+  {
+    "id": "T1036",
+    "name": "Masquerading",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\\\(users|temp|appdata|programdata|public|perflogs)\\\\\\S*?(svchost|lsass|csrss|services|winlogon|smss|explorer)\\.exe",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\.(pdf|docx?|xlsx?|jpg|png|txt)\\.(exe|scr|js|vbs|bat)\\b",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "EAL",
+      "FHRA",
+      "SBV"
+    ],
+    "checks": [
+      "Comparer le chemin au chemin système légitime et calculer le hash."
+    ]
+  },
+  {
+    "id": "T1027",
+    "name": "Obfuscated Files or Information",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "frombase64string",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\s-(e|ec|enc|encodedcommand)\\s+[A-Za-z0-9+\\/=]{40,}",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "base64\\s+(-d|--decode)",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "[A-Za-z0-9+\\/]{160,}={0,2}",
+        "flags": "",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "SEA",
+      "FCR"
+    ],
+    "checks": [
+      "Décoder la charge pour obtenir l’URL ou la commande réelle."
+    ]
+  },
+  {
+    "id": "T1218.011",
+    "name": "Rundll32",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "rundll32(\\.exe)?\\s+.*(javascript:|\\\\\\\\\\S+\\\\|https?:|\\\\temp\\\\|\\\\appdata\\\\|\\\\public\\\\|,#\\d)",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "comsvcs(\\.dll)?",
+        "flags": "i",
+        "weight": 1
+      },
+      {
+        "regex": "\\brundll32\\b",
+        "flags": "i",
+        "weight": 0.5
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "EDL",
+      "EAL"
+    ],
+    "checks": [
+      "Identifier la DLL chargée et son point d’entrée."
+    ]
+  },
+  {
+    "id": "T1218.005",
+    "name": "Mshta",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "mshta(\\.exe)?\\s+.*(https?:|javascript:|vbscript:|\\.hta)",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "EDL",
+      "URA"
+    ],
+    "checks": [
+      "Bloquer mshta.exe s’il n’a pas d’usage métier."
+    ]
+  },
+  {
+    "id": "T1218.010",
+    "name": "Regsvr32",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "regsvr32.*(\\/i:https?|scrobj)",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "EDL",
+      "OTF"
+    ],
+    "checks": [
+      "Récupérer le scriptlet .sct distant."
+    ]
+  },
+  {
+    "id": "T1112",
+    "name": "Modify Registry",
+    "tactics": [
+      "defev"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\breg(\\.exe)?\\s+add\\b|set-itemproperty.*hk(lm|cu)",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "SCP",
+      "SICA"
+    ],
+    "checks": [
+      "Vérifier la clé modifiée : persistance, désactivation de sécurité ?"
+    ]
+  },
+  {
+    "id": "T1003.001",
+    "name": "LSASS Memory",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "mimikatz|sekurlsa|logonpasswords",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "procdump.*lsass|lsass(\\.exe)?\\S*\\.dmp|comsvcs(\\.dll)?.*minidump",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "targetimage\\S*lsass\\.exe",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "grantedaccess[=:\\s]*0x1(0|4|4[13])10\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "CH",
+      "PSA",
+      "DUC",
+      "CR"
+    ],
+    "checks": [
+      "Considérer tous les comptes connectés sur la machine comme compromis.",
+      "Réinitialiser leurs mots de passe, krbtgt si un admin de domaine est touché."
+    ]
+  },
+  {
+    "id": "T1003.002",
+    "name": "Security Account Manager",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "reg(\\.exe)?\\s+save\\s+hklm\\\\(sam|system|security)\\b",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "CH",
+      "SCP",
+      "CR"
+    ],
+    "checks": [
+      "Changer les mots de passe admin locaux (LAPS)."
+    ]
+  },
+  {
+    "id": "T1003.003",
+    "name": "NTDS",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "ntdsutil",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "ntds\\.dit",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "vssadmin(\\.exe)?\\s+create\\s+shadow",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "CH",
+      "UAP",
+      "CR"
+    ],
+    "checks": [
+      "Traiter comme compromission totale du domaine : double réinitialisation krbtgt."
+    ]
+  },
+  {
+    "id": "T1003.006",
+    "name": "DCSync",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "lsadump::dcsync|\\bdcsync\\b|secretsdump",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "1131f6a[ad]|replicating directory changes",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "UAP",
+      "AZET",
+      "CR"
+    ],
+    "checks": [
+      "Vérifier quel compte non-DC a demandé la réplication."
+    ]
+  },
+  {
+    "id": "T1003.008",
+    "name": "/etc/passwd and /etc/shadow",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\/etc\\/shadow",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\bunshadow\\b|\\bjohn\\b|hashcat",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "LFP",
+      "CR"
+    ],
+    "checks": [
+      "Changer les mots de passe des comptes locaux de la machine."
+    ]
+  },
+  {
+    "id": "T1558.003",
+    "name": "Kerberoasting",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "kerberoast|rubeus|getuserspns",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "(ticket encryption type|ticketencryptiontype)[=:\\s]*0x17",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "SPP",
+      "AZET",
+      "DUC",
+      "CR"
+    ],
+    "checks": [
+      "Passer les comptes de service en AES et mots de passe de 25+ caractères (gMSA)."
+    ]
+  },
+  {
+    "id": "T1550.002",
+    "name": "Pass the Hash",
+    "tactics": [
+      "lm",
+      "defev"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "sekurlsa::pth|invoke-thehash|\\bpth-\\w+",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "logon\\s*type[=:\\s]*9\\b.*seclogo|\\bseclogo\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "CH",
+      "UBA",
+      "CR"
+    ],
+    "checks": [
+      "Vérifier les logons NTLM type 3 depuis ce poste vers les serveurs."
+    ]
+  },
+  {
+    "id": "T1552.001",
+    "name": "Credentials In Files",
+    "tactics": [
+      "cred"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\.aws\\/credentials|\\.git-credentials|unattend\\.xml|\\.env\\b|web\\.config",
+        "flags": "i",
+        "weight": 1
+      },
+      {
+        "regex": "findstr.*\\/s\\w*.*pass|grep\\s+-\\w*r\\w*\\s+.*pass(word|wd)?",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\bid_(rsa|ed25519)\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "LFP",
+      "RAPA",
+      "DF"
+    ],
+    "checks": [
+      "Faire tourner tous les secrets trouvés dans ces fichiers."
+    ]
+  },
+  {
+    "id": "T1046",
+    "name": "Network Service Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "\\bnmap\\b|masscan|rustscan|port\\s?scan",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "CAA",
+      "NTA",
+      "ITF"
+    ],
+    "checks": [
+      "Vérifier la source du scan : poste compromis ou outil IT ?"
+    ]
+  },
+  {
+    "id": "T1087.002",
+    "name": "Domain Account (AD recon)",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "sharphound|bloodhound|adfind|pingcastle",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "get-ad(user|computer|groupmember)|dsquery",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "UBA",
+      "RAPA",
+      "DUC"
+    ],
+    "checks": [
+      "Chercher les requêtes LDAP massives depuis cet hôte."
+    ]
+  },
+  {
+    "id": "T1069",
+    "name": "Permission Groups Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\bnet1?(\\.exe)?\\s+(local)?group\\b(?!.*\\/add)",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "UBA",
+      "PSA"
+    ],
+    "checks": [
+      "Mettre en contexte : admin légitime ou session utilisateur ?"
+    ]
+  },
+  {
+    "id": "T1482",
+    "name": "Domain Trust Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "nltest.*(domain_trusts|dclist)|get-adtrust",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PSA",
+      "UBA"
+    ],
+    "checks": [
+      "Signal précoce de reconnaissance AD : chercher les étapes suivantes."
+    ]
+  },
+  {
+    "id": "T1033",
+    "name": "System Owner/User Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\bwhoami\\b|query\\s+user\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "PSA"
+    ],
+    "checks": [
+      "Bruit fréquent seul, significatif enchaîné avec d’autres commandes de découverte."
+    ]
+  },
+  {
+    "id": "T1082",
+    "name": "System Information Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\bsysteminfo\\b|uname\\s+-a|hostnamectl|cat\\s+\\/etc\\/(os-release|issue)",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "PSA"
+    ],
+    "checks": [
+      "Voir si la commande suit un accès initial."
+    ]
+  },
+  {
+    "id": "T1016",
+    "name": "System Network Configuration Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "ipconfig\\s+\\/all|\\bifconfig\\b|route\\s+print|\\barp\\s+-a\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "PSA"
+    ],
+    "checks": [
+      "Voir si la commande suit un accès initial."
+    ]
+  },
+  {
+    "id": "T1057",
+    "name": "Process Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\btasklist\\b|\\bps\\s+(aux|-ef)\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "PSA"
+    ],
+    "checks": [
+      "Chercher une recherche d’antivirus ou d’EDR dans la sortie."
+    ]
+  },
+  {
+    "id": "T1018",
+    "name": "Remote System Discovery",
+    "tactics": [
+      "disc"
+    ],
+    "severity": 1,
+    "patterns": [
+      {
+        "regex": "\\bnet\\s+view\\b|\\bnbtscan\\b|ping\\s+-n\\s+1\\s",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "CAA",
+      "NTA"
+    ],
+    "checks": [
+      "Chercher les connexions SMB qui suivent."
+    ]
+  },
+  {
+    "id": "T1021.001",
+    "name": "Remote Desktop Protocol",
+    "tactics": [
+      "lm"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "logon\\s*type[=:\\s]*10\\b",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\bmstsc\\b|:3389\\b|termservice",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "RTSD",
+      "MFA",
+      "ITF"
+    ],
+    "checks": [
+      "Vérifier l’origine RDP : jump host autorisé ?"
+    ]
+  },
+  {
+    "id": "T1021.002",
+    "name": "SMB/Windows Admin Shares",
+    "tactics": [
+      "lm"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\\\\\\\[^\\s\\\\]+\\\\(admin|c|ipc)\\$",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "psexec|paexec|psexesvc",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "wmiexec|smbexec|atexec",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\bnet\\s+use\\s+\\\\\\\\",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "RTSD",
+      "UAP",
+      "ITF",
+      "LAM"
+    ],
+    "checks": [
+      "Lister les hôtes touchés par le même compte dans la fenêtre."
+    ]
+  },
+  {
+    "id": "T1569.002",
+    "name": "Service Execution",
+    "tactics": [
+      "exec"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "psexesvc",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "SBV",
+      "PSA",
+      "UAP"
+    ],
+    "checks": [
+      "Relier au poste source via le logon type 3 associé."
+    ]
+  },
+  {
+    "id": "T1021.006",
+    "name": "Windows Remote Management",
+    "tactics": [
+      "lm"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "\\bwinrm\\b|wsmprovhost|enter-pssession|invoke-command\\s+-computername|:598[56]\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "RTSD",
+      "UAP",
+      "ITF"
+    ],
+    "checks": [
+      "Restreindre WinRM aux postes d’administration."
+    ]
+  },
+  {
+    "id": "T1560.001",
+    "name": "Archive via Utility",
+    "tactics": [
+      "coll"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "\\b7z(a|\\.exe)?\\s+a\\s+.*-p|\\brar(\\.exe)?\\s+a\\s+.*-hp|\\bzip\\s+-(e|P)\\b|\\btar\\s+-?c\\w*z",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "FAPA",
+      "RAPA",
+      "DF"
+    ],
+    "checks": [
+      "Identifier les données archivées et leur sensibilité."
+    ]
+  },
+  {
+    "id": "T1567.002",
+    "name": "Exfiltration to Cloud Storage",
+    "tactics": [
+      "exfil"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "\\brclone\\b|mega(\\.nz|\\.io|cmd)|transfer\\.sh|gofile\\.io|anonfiles|dropbox.*upload",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "OTF",
+      "PHDURA",
+      "DNSDL"
+    ],
+    "checks": [
+      "Estimer le volume sorti via proxy ou pare-feu.",
+      "Lire la config rclone pour connaître la destination."
+    ]
+  },
+  {
+    "id": "T1048",
+    "name": "Exfiltration Over Alternative Protocol",
+    "tactics": [
+      "exfil"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "curl\\s+.*(-T\\s|--upload-file|-F\\s+\\S*@)|\\bscp\\s+\\S+\\s+\\S+@\\S+:|\\bftp\\s+-n\\b|\\btftp\\b",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "OTF",
+      "PHDURA",
+      "NTA"
+    ],
+    "checks": [
+      "Vérifier la destination et le volume transféré."
+    ]
+  },
+  {
+    "id": "T1105",
+    "name": "Ingress Tool Transfer",
+    "tactics": [
+      "c2"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "certutil(\\.exe)?\\b.*-urlcache",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "bitsadmin(\\.exe)?\\b.*\\/transfer",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "invoke-webrequest|\\biwr\\s+https?:|start-bitstransfer",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "(wget|curl)(\\.exe)?\\s+\\S*\\s*https?:\\/\\/",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "URA",
+      "OTF",
+      "FHRA",
+      "EDL"
+    ],
+    "checks": [
+      "Récupérer le fichier téléchargé et son hash."
+    ]
+  },
+  {
+    "id": "T1071.001",
+    "name": "Web Protocols (C2)",
+    "tactics": [
+      "c2"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "cobalt\\s?strike|\\bbeacon(\\.exe|\\.dll)|meterpreter|\\bsliver\\b|\\bhavoc\\b|\\bposhc2\\b",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "NTA",
+      "IPRA",
+      "OTF",
+      "PT"
+    ],
+    "checks": [
+      "Chercher le beaconing régulier vers la même destination."
+    ]
+  },
+  {
+    "id": "T1071.004",
+    "name": "DNS (C2)",
+    "tactics": [
+      "c2"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "dnscat|iodine|dns2tcp",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "(query|qname)\\S*[=:\\s]+\\S*\\b[a-z0-9]{40,}\\.[a-z0-9-]+\\.[a-z]{2,}",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "DNSTA",
+      "DNSDL",
+      "PMAD"
+    ],
+    "checks": [
+      "Mesurer le volume de requêtes vers le domaine parent."
+    ]
+  },
+  {
+    "id": "T1095",
+    "name": "Non-Application Layer Protocol",
+    "tactics": [
+      "c2"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "\\bnc(at)?\\s+(-\\w+\\s+)*\\d{1,3}(\\.\\d{1,3}){3}\\s+\\d+",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\/dev\\/tcp\\/",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "NTA",
+      "OTF",
+      "PMAD"
+    ],
+    "checks": [
+      "Bloquer l’IP distante en sortie."
+    ]
+  },
+  {
+    "id": "T1219",
+    "name": "Remote Access Software",
+    "tactics": [
+      "c2"
+    ],
+    "severity": 2,
+    "patterns": [
+      {
+        "regex": "anydesk|teamviewer|screenconnect|connectwise|atera|splashtop|rustdesk|remoteutilities",
+        "flags": "i",
+        "weight": 2
+      }
+    ],
+    "d3fend": [
+      "EDL",
+      "OTF",
+      "EAL"
+    ],
+    "checks": [
+      "Outil autorisé dans l’entreprise ? Sinon, c’est un accès persistant."
+    ]
+  },
+  {
+    "id": "T1572",
+    "name": "Protocol Tunneling",
+    "tactics": [
+      "c2"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "\\bngrok\\b|\\bchisel\\b|plink.*\\s-R\\s|ssh\\s+.*\\s-R\\s+\\d|\\bfrpc\\b|cloudflared\\s+tunnel",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PMAD",
+      "OTF",
+      "NTA"
+    ],
+    "checks": [
+      "Couper le tunnel et chercher le service exposé à travers."
+    ]
+  },
+  {
+    "id": "T1490",
+    "name": "Inhibit System Recovery",
+    "tactics": [
+      "impact"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "vssadmin(\\.exe)?\\s+delete\\s+shadows",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "wmic.*shadowcopy\\s+delete",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "bcdedit.*(recoveryenabled\\s+no|bootstatuspolicy\\s+ignoreallfailures)",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "wbadmin.*delete\\s+(catalog|backup|systemstatebackup)",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "RF",
+      "SCP",
+      "PSA"
+    ],
+    "checks": [
+      "Signe fort de rançongiciel imminent : isoler l’hôte maintenant.",
+      "Protéger les sauvegardes hors ligne."
+    ]
+  },
+  {
+    "id": "T1486",
+    "name": "Data Encrypted for Impact",
+    "tactics": [
+      "impact"
+    ],
+    "severity": 4,
+    "patterns": [
+      {
+        "regex": "your (files|network) (have been|has been|are) encrypted",
+        "flags": "i",
+        "weight": 3
+      },
+      {
+        "regex": "\\bransom",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "readme.*(decrypt|restore)|(decrypt|restore|recover)[_-]?(files|instructions|readme)|how_to_(decrypt|recover)",
+        "flags": "i",
+        "weight": 2
+      },
+      {
+        "regex": "\\.(locked|encrypted|crypt)\\b",
+        "flags": "i",
+        "weight": 1
+      }
+    ],
+    "d3fend": [
+      "RF",
+      "FAPA",
+      "DF",
+      "PT"
+    ],
+    "checks": [
+      "Isoler du réseau sans éteindre : la mémoire peut contenir la clé.",
+      "Identifier le patient zéro via le premier fichier chiffré."
+    ]
+  },
+  {
+    "id": "T1496",
+    "name": "Resource Hijacking",
+    "tactics": [
+      "impact"
+    ],
+    "severity": 3,
+    "patterns": [
+      {
+        "regex": "xmrig|\\bminerd\\b|stratum\\+tcp|cryptonight|nicehash|\\bmonero\\b",
+        "flags": "i",
+        "weight": 3
+      }
+    ],
+    "d3fend": [
+      "PT",
+      "OTF",
+      "EDL"
+    ],
+    "checks": [
+      "Chercher comment le mineur est arrivé : c’est souvent la partie grave."
+    ]
+  }
+]

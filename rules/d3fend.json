@@ -1,0 +1,278 @@
+{
+  "MFA": {
+    "id": "D3-MFA",
+    "name": "Multi-factor Authentication",
+    "tactic": "Harden",
+    "benefit": "Un mot de passe deviné ou volé ne suffit plus pour ouvrir une session."
+  },
+  "SPP": {
+    "id": "D3-SPP",
+    "name": "Strong Password Policy",
+    "tactic": "Harden",
+    "benefit": "Longueur et complexité rendent le devinement et le spraying inefficaces."
+  },
+  "CH": {
+    "id": "D3-CH",
+    "name": "Credential Hardening",
+    "tactic": "Harden",
+    "benefit": "Protège les secrets en mémoire et au repos (Credential Guard, LAPS, RunAsPPL)."
+  },
+  "UAP": {
+    "id": "D3-UAP",
+    "name": "User Account Permissions",
+    "tactic": "Isolate",
+    "benefit": "Moindre privilège : limite ce qu'un compte compromis peut faire."
+  },
+  "SCP": {
+    "id": "D3-SCP",
+    "name": "System Configuration Permissions",
+    "tactic": "Harden",
+    "benefit": "Empêche les comptes non admin de modifier services, tâches et clés système."
+  },
+  "LFP": {
+    "id": "D3-LFP",
+    "name": "Local File Permissions",
+    "tactic": "Isolate",
+    "benefit": "Restreint l'accès aux fichiers sensibles et aux dossiers d'écriture."
+  },
+  "ACH": {
+    "id": "D3-ACH",
+    "name": "Application Configuration Hardening",
+    "tactic": "Harden",
+    "benefit": "Durcit la configuration (macros, WAF, modules inutiles désactivés)."
+  },
+  "SU": {
+    "id": "D3-SU",
+    "name": "Software Update",
+    "tactic": "Harden",
+    "benefit": "Corrige la vulnérabilité exploitée avant qu'elle ne serve de porte d'entrée."
+  },
+  "ANET": {
+    "id": "D3-ANET",
+    "name": "Authentication Event Thresholding",
+    "tactic": "Detect",
+    "benefit": "Alerte dès que les échecs d'authentification dépassent un seuil par compte ou par source."
+  },
+  "AZET": {
+    "id": "D3-AZET",
+    "name": "Authorization Event Thresholding",
+    "tactic": "Detect",
+    "benefit": "Alerte sur des volumes anormaux de demandes d'autorisation (tickets Kerberos, accès)."
+  },
+  "UGLPA": {
+    "id": "D3-UGLPA",
+    "name": "User Geolocation Logon Pattern Analysis",
+    "tactic": "Detect",
+    "benefit": "Repère une connexion depuis une origine inhabituelle pour ce compte."
+  },
+  "UBA": {
+    "id": "D3-UBA",
+    "name": "User Behavior Analysis",
+    "tactic": "Detect",
+    "benefit": "Compare l'activité d'un compte à son comportement habituel."
+  },
+  "LAM": {
+    "id": "D3-LAM",
+    "name": "Local Account Monitoring",
+    "tactic": "Detect",
+    "benefit": "Surveille création, modification et ajout de comptes locaux aux groupes privilégiés."
+  },
+  "PSA": {
+    "id": "D3-PSA",
+    "name": "Process Spawn Analysis",
+    "tactic": "Detect",
+    "benefit": "Détecte les chaînes parent → enfant anormales (Word → PowerShell, w3wp → cmd)."
+  },
+  "PLA": {
+    "id": "D3-PLA",
+    "name": "Process Lineage Analysis",
+    "tactic": "Detect",
+    "benefit": "Reconstitue l'arbre de processus pour relier chaque action à son origine."
+  },
+  "SEA": {
+    "id": "D3-SEA",
+    "name": "Script Execution Analysis",
+    "tactic": "Detect",
+    "benefit": "Inspecte le contenu des scripts exécutés (AMSI, Script Block Logging)."
+  },
+  "SCA": {
+    "id": "D3-SCA",
+    "name": "System Call Analysis",
+    "tactic": "Detect",
+    "benefit": "Repère les appels système d'injection ou d'accès mémoire suspects."
+  },
+  "NTA": {
+    "id": "D3-NTA",
+    "name": "Network Traffic Analysis",
+    "tactic": "Detect",
+    "benefit": "Analyse les flux pour repérer C2, transferts et mouvements anormaux."
+  },
+  "DNSTA": {
+    "id": "D3-DNSTA",
+    "name": "DNS Traffic Analysis",
+    "tactic": "Detect",
+    "benefit": "Détecte tunnels DNS, domaines générés et requêtes anormalement longues."
+  },
+  "CAA": {
+    "id": "D3-CAA",
+    "name": "Connection Attempt Analysis",
+    "tactic": "Detect",
+    "benefit": "Repère balayages de ports et tentatives de connexion en rafale."
+  },
+  "RTSD": {
+    "id": "D3-RTSD",
+    "name": "Remote Terminal Session Detection",
+    "tactic": "Detect",
+    "benefit": "Signale les sessions interactives distantes (RDP, SSH, WinRM) inattendues."
+  },
+  "PHDURA": {
+    "id": "D3-PHDURA",
+    "name": "Per Host Download-Upload Ratio Analysis",
+    "tactic": "Detect",
+    "benefit": "Un poste qui envoie beaucoup plus qu'il ne reçoit trahit une exfiltration."
+  },
+  "PMAD": {
+    "id": "D3-PMAD",
+    "name": "Protocol Metadata Anomaly Detection",
+    "tactic": "Detect",
+    "benefit": "Repère les protocoles détournés (tunnels, en-têtes ou tailles anormales)."
+  },
+  "IPRA": {
+    "id": "D3-IPRA",
+    "name": "IP Reputation Analysis",
+    "tactic": "Detect",
+    "benefit": "Confronte les IP contactées aux flux de réputation (Tor, VPS malveillants)."
+  },
+  "DNRA": {
+    "id": "D3-DNRA",
+    "name": "Domain Name Reputation Analysis",
+    "tactic": "Detect",
+    "benefit": "Évalue la réputation et l'âge des domaines contactés."
+  },
+  "URA": {
+    "id": "D3-URA",
+    "name": "URL Reputation Analysis",
+    "tactic": "Detect",
+    "benefit": "Bloque ou signale les URL connues pour distribuer des charges."
+  },
+  "FHRA": {
+    "id": "D3-FHRA",
+    "name": "File Hash Reputation Analysis",
+    "tactic": "Detect",
+    "benefit": "Vérifie les hash des binaires déposés contre la threat intel."
+  },
+  "DA": {
+    "id": "D3-DA",
+    "name": "Dynamic Analysis",
+    "tactic": "Detect",
+    "benefit": "Fait exploser la pièce jointe ou le binaire en sandbox avant livraison."
+  },
+  "FCR": {
+    "id": "D3-FCR",
+    "name": "File Content Rules",
+    "tactic": "Detect",
+    "benefit": "Règles YARA/signatures sur le contenu des fichiers écrits."
+  },
+  "FAPA": {
+    "id": "D3-FAPA",
+    "name": "File Access Pattern Analysis",
+    "tactic": "Detect",
+    "benefit": "Repère les lectures/écritures massives (chiffrement, collecte)."
+  },
+  "RAPA": {
+    "id": "D3-RAPA",
+    "name": "Resource Access Pattern Analysis",
+    "tactic": "Detect",
+    "benefit": "Signale l'accès inhabituel à des ressources sensibles (partages, secrets)."
+  },
+  "SJA": {
+    "id": "D3-SJA",
+    "name": "Scheduled Job Analysis",
+    "tactic": "Detect",
+    "benefit": "Inspecte chaque tâche planifiée ou cron créée ou modifiée."
+  },
+  "SICA": {
+    "id": "D3-SICA",
+    "name": "System Init Config Analysis",
+    "tactic": "Detect",
+    "benefit": "Surveille clés Run, services et scripts de démarrage."
+  },
+  "SBV": {
+    "id": "D3-SBV",
+    "name": "Service Binary Verification",
+    "tactic": "Detect",
+    "benefit": "Vérifie signature et emplacement du binaire d'un nouveau service."
+  },
+  "CSPP": {
+    "id": "D3-CSPP",
+    "name": "Client-server Payload Profiling",
+    "tactic": "Detect",
+    "benefit": "Profile les requêtes HTTP pour isoler injections et charges anormales."
+  },
+  "EAL": {
+    "id": "D3-EAL",
+    "name": "Executable Allowlisting",
+    "tactic": "Isolate",
+    "benefit": "Seuls les binaires approuvés s'exécutent (AppLocker, WDAC)."
+  },
+  "EDL": {
+    "id": "D3-EDL",
+    "name": "Executable Denylisting",
+    "tactic": "Isolate",
+    "benefit": "Bloque les LOLBins et outils offensifs connus sur les postes utilisateurs."
+  },
+  "ITF": {
+    "id": "D3-ITF",
+    "name": "Inbound Traffic Filtering",
+    "tactic": "Isolate",
+    "benefit": "Filtre les flux entrants (géoblocage, WAF, ports exposés)."
+  },
+  "OTF": {
+    "id": "D3-OTF",
+    "name": "Outbound Traffic Filtering",
+    "tactic": "Isolate",
+    "benefit": "Bloque les sorties non autorisées : C2, téléchargements, exfiltration."
+  },
+  "DNSDL": {
+    "id": "D3-DNSDL",
+    "name": "DNS Denylisting",
+    "tactic": "Isolate",
+    "benefit": "Coupe la résolution des domaines malveillants."
+  },
+  "DUC": {
+    "id": "D3-DUC",
+    "name": "Decoy User Credential",
+    "tactic": "Deceive",
+    "benefit": "Des identifiants leurres signalent immédiatement toute tentative de vol."
+  },
+  "DF": {
+    "id": "D3-DF",
+    "name": "Decoy File",
+    "tactic": "Deceive",
+    "benefit": "Des fichiers canari alertent dès qu'on les lit ou les chiffre."
+  },
+  "AL": {
+    "id": "D3-AL",
+    "name": "Account Locking",
+    "tactic": "Evict",
+    "benefit": "Verrouille le compte ciblé ou compromis."
+  },
+  "CR": {
+    "id": "D3-CR",
+    "name": "Credential Revocation",
+    "tactic": "Evict",
+    "benefit": "Révoque et renouvelle les secrets exposés (mots de passe, tickets, clés)."
+  },
+  "PT": {
+    "id": "D3-PT",
+    "name": "Process Termination",
+    "tactic": "Evict",
+    "benefit": "Tue le processus malveillant et ses enfants."
+  },
+  "RF": {
+    "id": "D3-RF",
+    "name": "Restore File",
+    "tactic": "Restore",
+    "benefit": "Restaure depuis une sauvegarde hors ligne et vérifiée."
+  }
+}

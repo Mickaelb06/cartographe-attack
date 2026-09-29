@@ -1,0 +1,195 @@
+# Règles Sigma intégrées à Cartographe ATT&CK (format https://sigmahq.io).
+# Elles ciblent des événements Windows à champs précis (XML, JSON ou texte clé=valeur), là où une regex sur la ligne
+# entière est fragile. Les règles SigmaHQ s'importent en plus depuis la page (bouton « Importer »).
+title: Office lançant un interpréteur ou un binaire proxy
+id: e79a3a87-95ab-4d41-a3c4-9c7776582b6b
+status: experimental
+description: Un document Office qui lance un shell, un moteur de script ou un binaire système détourné est le signe classique d'une macro malveillante.
+author: Cartographe ATT&CK
+date: 2026-09-29
+tags:
+  - attack.execution
+  - attack.t1204.002
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+      - '\OUTLOOK.EXE'
+      - '\ONENOTE.EXE'
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\cmd.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+      - '\regsvr32.exe'
+  condition: selection
+falsepositives:
+  - Compléments Office internes qui lancent des scripts
+level: high
+---
+title: Accès mémoire à LSASS par un processus non système
+id: 007f99fb-f601-4a83-8057-94c879200d14
+status: experimental
+description: Sysmon 10 (ProcessAccess) vers lsass.exe avec des droits de lecture mémoire, depuis un processus hors des emplacements système.
+author: Cartographe ATT&CK
+date: 2026-09-29
+tags:
+  - attack.credential-access
+  - attack.t1003.001
+logsource:
+  category: process_access
+  product: windows
+detection:
+  selection:
+    EventID: 10
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess|contains:
+      - '0x1010'
+      - '0x1410'
+      - '0x1438'
+      - '0x143a'
+      - '0x1fffff'
+  filter_system:
+    SourceImage|startswith:
+      - 'C:\Windows\System32\'
+      - 'C:\Program Files\Windows Defender\'
+      - 'C:\ProgramData\Microsoft\Windows Defender\'
+  condition: selection and not filter_system
+falsepositives:
+  - Antivirus ou EDR tiers installés hors des chemins filtrés
+level: high
+---
+title: Service installé depuis un dossier inscriptible
+id: 65b4ee76-a0aa-4ca9-b391-0f8a093e734c
+status: experimental
+description: Événement 7045 (System) ou 4697 (Security) dont le binaire est dans un dossier utilisateur ou temporaire, ou lancé via un interpréteur.
+author: Cartographe ATT&CK
+date: 2026-09-29
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1543.003
+logsource:
+  product: windows
+  service: system
+detection:
+  selection_event:
+    EventID:
+      - 7045
+      - 4697
+  selection_path:
+    - ImagePath|contains:
+        - '\Users\'
+        - '\AppData\'
+        - '\Temp\'
+        - '\ProgramData\'
+        - '\Public\'
+        - 'powershell'
+        - 'cmd.exe /c'
+        - 'cmd /c'
+    - ServiceFileName|contains:
+        - '\Users\'
+        - '\AppData\'
+        - '\Temp\'
+        - '\ProgramData\'
+        - '\Public\'
+        - 'powershell'
+        - 'cmd.exe /c'
+        - 'cmd /c'
+  condition: all of selection_*
+falsepositives:
+  - Logiciels légitimes installés dans ProgramData
+level: high
+---
+title: Tâche planifiée créée avec une commande suspecte
+id: 5cd64108-e787-46ed-9b96-2b03df7d01fd
+status: experimental
+description: Événement 4698 dont le contenu XML de la tâche lance un interpréteur ou un binaire depuis un dossier inscriptible.
+author: Cartographe ATT&CK
+date: 2026-09-29
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.t1053.005
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4698
+    TaskContent|contains:
+      - 'powershell'
+      - 'cmd.exe'
+      - 'mshta'
+      - 'rundll32'
+      - '\AppData\'
+      - '\Temp\'
+      - '\Users\Public\'
+  condition: selection
+falsepositives:
+  - Scripts d'administration planifiés par l'équipe IT
+level: medium
+---
+title: Ticket Kerberos de service demandé en RC4 (Kerberoasting)
+id: 897437be-667c-4f50-b0cb-f07eb050ec62
+status: experimental
+description: Événement 4769 avec chiffrement RC4 (0x17) pour un compte de service utilisateur, hors comptes machine et krbtgt.
+author: Cartographe ATT&CK
+date: 2026-09-29
+tags:
+  - attack.credential-access
+  - attack.t1558.003
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+    TicketEncryptionType: '0x17'
+  filter_machine:
+    ServiceName|endswith: '$'
+  filter_krbtgt:
+    ServiceName: 'krbtgt'
+  condition: selection and not 1 of filter_*
+falsepositives:
+  - Applications anciennes qui ne gèrent que RC4
+level: medium
+---
+title: Ajout à un groupe privilégié
+id: 071d1109-6ba3-4e72-a93f-e6c7d7901ca6
+status: experimental
+description: Événements 4728, 4732 ou 4756 vers un groupe d'administration.
+author: Cartographe ATT&CK
+date: 2026-09-29
+tags:
+  - attack.persistence
+  - attack.privilege-escalation
+  - attack.t1098
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID:
+      - 4728
+      - 4732
+      - 4756
+    TargetUserName|contains:
+      - 'Admin'
+      - 'Administrat'
+      - 'Domain Admins'
+      - 'Enterprise Admins'
+      - 'Schema Admins'
+      - 'Backup Operators'
+  condition: selection
+falsepositives:
+  - Ajouts planifiés par l'équipe IT (vérifier le ticket de changement)
+level: high

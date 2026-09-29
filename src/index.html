@@ -1,0 +1,122 @@
+<title>Cartographe ATT&amp;CK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/*__STYLE__*/
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Cartographe <span>ATT&amp;CK</span></h1>
+      <span class="flow">logs → techniques ATT&amp;CK → contre-mesures D3FEND</span>
+    </div>
+    <div class="actions">
+      <button class="btn" id="copyReport" type="button" title="Copier un rapport Markdown pour le ticket">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+        Rapport Markdown</button>
+      <button class="btn" id="copyLayer" type="button" title="Copier une couche JSON pour ATT&CK Navigator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5"/></svg>
+        Couche Navigator</button>
+    </div>
+  </header>
+
+  <nav class="levels" id="levels" role="tablist" aria-label="Niveau d'analyse SOC"></nav>
+
+  <div class="app">
+    <aside class="side">
+      <section class="panel input" aria-labelledby="in-h">
+        <div class="sec-h"><span class="eyebrow" id="in-h">Logs à analyser</span><span class="eyebrow" id="lineCount">0 ligne</span></div>
+        <div class="drop" id="drop">
+          <label for="logs" class="eyebrow" hidden>Logs</label>
+          <textarea id="logs" spellcheck="false" placeholder="Collez ici des logs : Sysmon, Security EventLog, auth.log, access.log, EDR, pare-feu… Texte, JSON ou export XML des journaux Windows. Vous pouvez aussi déposer un fichier."></textarea>
+        </div>
+        <div class="in-actions">
+          <button class="btn primary" id="run" type="button">Analyser</button>
+          <button class="btn" id="clear" type="button">Effacer</button>
+          <label class="btn" for="file">Fichier…</label>
+          <input type="file" id="file" accept=".log,.txt,.csv,.json,.jsonl,.xml,text/*" hidden>
+          <button class="btn quiet" id="demo" type="button" title="Charge une attaque fictive (SSH, web, Windows) pour découvrir l'outil">Scénario de démo</button>
+          <span class="hint"><kbd>Ctrl</kbd>+<kbd>Entrée</kbd></span>
+        </div>
+        <p class="privacy">L'analyse par règles tourne dans votre navigateur : rien n'est envoyé. Seul le bouton « Analyse approfondie » transmet les logs à Claude.</p>
+      </section>
+
+      <section class="panel sigma" aria-labelledby="sg-h">
+        <div class="sec-h"><span class="eyebrow" id="sg-h">Règles Sigma</span><span class="eyebrow" id="sigmaCount"></span></div>
+        <p class="sigma-txt" id="sigmaInfo"></p>
+        <div class="in-actions">
+          <label class="btn" for="sigmaFiles" title="Fichiers .yml au format Sigma (SigmaHQ ou les vôtres)">Importer des .yml</label>
+          <input type="file" id="sigmaFiles" accept=".yml,.yaml" multiple hidden>
+          <label class="btn" for="sigmaDir" title="Un dossier de règles, par exemple rules/windows du dépôt SigmaHQ">Dossier…</label>
+          <input type="file" id="sigmaDir" webkitdirectory multiple hidden>
+          <button class="btn quiet" id="sigmaClear" type="button" hidden>Retirer les importées</button>
+        </div>
+        <details class="sigma-err" id="sigmaErr" hidden><summary></summary><ul></ul></details>
+      </section>
+
+      <section class="panel ioc" aria-labelledby="ioc-h">
+        <div class="sec-h"><span class="eyebrow" id="ioc-h">Indicateurs extraits</span><span class="eyebrow">clic = copier</span></div>
+        <div class="ioc-groups" id="iocs"></div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="panel summary" id="summary" aria-label="Synthèse"></section>
+
+      <section class="panel level" id="levelPanel" role="tabpanel" aria-labelledby="lv-h"></section>
+
+      <section class="panel chain tech-detail" aria-labelledby="chain-h">
+        <div class="chain-head">
+          <span class="eyebrow" id="chain-h">Couverture de la chaîne d'attaque · ATT&amp;CK Enterprise</span>
+          <span class="filter-note" id="filterNote"></span>
+        </div>
+        <div class="chain-scroll"><div class="chain-grid" id="chain"></div></div>
+      </section>
+
+      <section class="panel claude tech-detail" id="claudePanel" hidden aria-labelledby="cl-h">
+        <div class="claude-h">
+          <div>
+            <h2 id="cl-h">Analyse approfondie avec Claude</h2>
+            <p class="sub">Deuxième avis sur les mêmes logs : contexte, chronologie, techniques que les règles ne voient pas. Utilise votre quota Claude.</p>
+          </div>
+          <div class="row">
+            <button class="btn" id="stopClaude" type="button" hidden>Arrêter</button>
+            <button class="btn primary" id="askClaude" type="button">Lancer l'analyse</button>
+          </div>
+        </div>
+        <div class="status" id="claudeStatus" hidden></div>
+        <div class="claude-out" id="claudeOut" hidden></div>
+      </section>
+
+      <div class="cols tech-detail">
+        <section aria-labelledby="t-h">
+          <div class="list-h"><h2 id="t-h">Techniques détectées</h2><span class="filter-note" id="techCount"></span></div>
+          <div class="techs" id="techs"></div>
+        </section>
+        <section class="panel prio" aria-labelledby="p-h">
+          <h2 id="p-h">Contre-mesures D3FEND prioritaires</h2>
+          <p class="sub">Classement par couverture : chaque contre-mesure cumule la sévérité et la confiance des techniques qu'elle contre.</p>
+          <div class="legend">
+            <span class="t-harden">Harden</span><span class="t-detect">Detect</span><span class="t-isolate">Isolate</span><span class="t-deceive">Deceive</span><span class="t-evict">Evict</span><span class="t-restore">Restore</span>
+          </div>
+          <ol class="plist" id="prio"></ol>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<div class="modal" id="modal" hidden>
+  <div class="box">
+    <div class="row"><strong id="modalTitle">Copier</strong><button class="btn" id="modalClose" type="button">Fermer</button></div>
+    <label for="modalText" class="eyebrow">Sélectionnez puis copiez (Ctrl+C)</label>
+    <textarea id="modalText" readonly></textarea>
+  </div>
+</div>
+
+<script>
+/*__SCRIPT__*/
+</script>

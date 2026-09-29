@@ -1,0 +1,100 @@
+[
+  {
+    "key": "recon",
+    "id": "TA0043",
+    "name": "Reconnaissance",
+    "plain": "L'attaquant a sondé nos systèmes exposés.",
+    "hunt": "Chercher les autres scans depuis les mêmes IP sources sur le pare-feu et le WAF, et les cibles qu'ils ont visées."
+  },
+  {
+    "key": "resdev",
+    "id": "TA0042",
+    "name": "Resource Development",
+    "plain": "L'attaquant a préparé son infrastructure (domaines, serveurs, outils).",
+    "hunt": "Rechercher les domaines récemment enregistrés et les IP d'hébergeurs VPS contactés par le parc."
+  },
+  {
+    "key": "ia",
+    "id": "TA0001",
+    "name": "Initial Access",
+    "plain": "L'attaquant a obtenu un premier accès à notre système d'information.",
+    "hunt": "Chercher le même vecteur ailleurs : même expéditeur ou pièce jointe, même URL exploitée, mêmes IP de connexion sur les autres comptes."
+  },
+  {
+    "key": "exec",
+    "id": "TA0002",
+    "name": "Execution",
+    "plain": "L'attaquant a exécuté du code sur au moins une machine.",
+    "hunt": "Chercher les chaînes parent → enfant anormales (Office, navigateur, serveur web → shell) sur tout le parc dans la même fenêtre de temps."
+  },
+  {
+    "key": "persist",
+    "id": "TA0003",
+    "name": "Persistence",
+    "plain": "L'attaquant s'est installé durablement : il peut revenir même après un redémarrage.",
+    "hunt": "Inventorier tâches planifiées, services, clés Run, crontabs, clés SSH et comptes créés depuis le début de l'incident."
+  },
+  {
+    "key": "privesc",
+    "id": "TA0004",
+    "name": "Privilege Escalation",
+    "plain": "L'attaquant a obtenu des droits plus élevés.",
+    "hunt": "Lister les ajouts aux groupes d'administration et les usages de sudo, UAC et comptes de service depuis le premier accès."
+  },
+  {
+    "key": "defev",
+    "id": "TA0005",
+    "name": "Defense Evasion",
+    "plain": "L'attaquant a tenté de désactiver nos protections ou d'effacer ses traces.",
+    "hunt": "Chercher les trous de télémétrie (machines silencieuses, journaux effacés, EDR arrêté) et compléter depuis le SIEM ou le réseau."
+  },
+  {
+    "key": "cred",
+    "id": "TA0006",
+    "name": "Credential Access",
+    "plain": "Des identifiants ont été volés ou attaqués.",
+    "hunt": "Suivre l'usage des comptes exposés : nouvelles connexions, nouvelles machines, horaires inhabituels, tickets Kerberos anormaux."
+  },
+  {
+    "key": "disc",
+    "id": "TA0007",
+    "name": "Discovery",
+    "plain": "L'attaquant a exploré notre réseau et nos annuaires.",
+    "hunt": "Chercher les requêtes LDAP massives, balayages internes et commandes de reconnaissance depuis d'autres postes."
+  },
+  {
+    "key": "lm",
+    "id": "TA0008",
+    "name": "Lateral Movement",
+    "plain": "L'attaquant s'est déplacé vers d'autres machines.",
+    "hunt": "Cartographier les connexions SMB, RDP, WinRM et SSH sortantes des machines touchées pour trouver les rebonds."
+  },
+  {
+    "key": "coll",
+    "id": "TA0009",
+    "name": "Collection",
+    "plain": "L'attaquant a rassemblé des données, probablement pour les sortir.",
+    "hunt": "Chercher les archives créées (7z, zip, rar) et les accès massifs aux partages depuis les machines touchées."
+  },
+  {
+    "key": "c2",
+    "id": "TA0011",
+    "name": "Command and Control",
+    "plain": "L'attaquant contrôle à distance au moins une machine.",
+    "hunt": "Chercher les autres machines qui contactent les mêmes IP ou domaines, et les connexions régulières (beaconing)."
+  },
+  {
+    "key": "exfil",
+    "id": "TA0010",
+    "name": "Exfiltration",
+    "plain": "Des données ont pu sortir de l'entreprise.",
+    "hunt": "Mesurer les volumes sortants par machine et par destination (stockage cloud, IP externes) sur la période."
+  },
+  {
+    "key": "impact",
+    "id": "TA0040",
+    "name": "Impact",
+    "plain": "L'attaquant a endommagé ou chiffré des systèmes, ou détourné nos ressources.",
+    "hunt": "Chercher sur tout le parc les suppressions de sauvegardes, arrêts de services et écritures massives de fichiers."
+  }
+]

