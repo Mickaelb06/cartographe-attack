@@ -109,3 +109,7 @@ npm test && npm run build
 ```
 
 puis republier `dist/cartographe-attack.html` sur l'Artifact existant (https://claude.ai/artifact/RrrYpSJz4tcxuopTxZAQgD) avec la capacité `sample`.
+
+## Licence
+
+[MIT](LICENSE). Les règles SigmaHQ ne sont pas incluses : elles restent sous leur propre licence (Detection Rule License) et s'importent depuis la page.

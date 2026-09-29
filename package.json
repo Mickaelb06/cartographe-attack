@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "description": "Triage SOC : logs → techniques MITRE ATT&CK → contre-mesures D3FEND",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
