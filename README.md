@@ -52,11 +52,11 @@ Les champs lus par Sigma viennent du XML Windows, du JSON (champs ECS renommés 
 ```sh
 npm install        # une fois : installe esbuild et js-yaml
 npm test           # intégrité des règles + moteur sur les 4 exemples
-npm run build      # produit dist/cartographe-attack.html (à publier) et dist/preview.html (à ouvrir en local)
+npm run build      # produit dist/site/index.html (site et aperçu local) et dist/cartographe-attack.html (Artifact)
 npm run dev        # reconstruit à chaque modification de src/ ou rules/
 ```
 
-En local, ouvrir `dist/preview.html` dans un navigateur. Le panneau « Analyse approfondie avec Claude » n'apparaît que dans claude.ai, où la capacité `sample` existe.
+En local, ouvrir `dist/site/index.html` dans un navigateur. Le panneau « Analyse approfondie avec Claude » n'apparaît que dans claude.ai, où la capacité `sample` existe.
 
 ## Organisation
 
@@ -102,7 +102,13 @@ Ajouter un objet dans `rules/attack-rules.json` :
 
 Ensuite `npm test` : les tests vérifient le format de chaque règle et que les exemples donnent toujours les détections attendues.
 
-## Publier
+## Héberger sur Netlify
+
+Le dépôt contient `netlify.toml` : Netlify lance `npm run build` et publie `dist/site`. Il suffit de connecter le dépôt GitHub à Netlify (Add new site → Import an existing project) ; chaque `git push` sur `main` redéploie le site.
+
+Les en-têtes envoyés interdisent à la page toute connexion réseau (`connect-src 'none'`) : les logs collés ne peuvent pas quitter le navigateur. Seules les polices Google Fonts sont chargées.
+
+## Publier comme Artifact claude.ai
 
 ```sh
 npm test && npm run build

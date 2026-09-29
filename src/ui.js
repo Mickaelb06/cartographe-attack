@@ -337,7 +337,7 @@ $('#copyLayer').onclick = () => copy(navigatorLayer(state), 'Couche Navigator');
 let sampleFn = null, ctl = null;
 (async () => {
   try { sampleFn = window.claude ? await window.claude.use('sample') : null; } catch { sampleFn = null; }
-  if (sampleFn) $('#claudePanel').hidden = false;
+  if (sampleFn) { $('#claudePanel').hidden = false; $('#privacyClaude').hidden = false; }
 })();
 
 function resetClaude() {

@@ -1,0 +1,16 @@
+# Netlify : construit la page et publie dist/site (dist/site/index.html).
+[build]
+  command = "npm run build"
+  publish = "dist/site"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# connect-src 'none' : la page ne peut ouvrir aucune connexion réseau, les logs collés ne quittent pas le navigateur.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
